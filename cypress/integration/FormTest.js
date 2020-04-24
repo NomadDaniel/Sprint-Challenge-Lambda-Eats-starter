@@ -44,5 +44,13 @@ describe("Testing the form", function() {
       .get('button[name="submit"]')
       .click()
 
-    })
+  })
+  it("Error validation test", function () {
+    cy
+    .get('button[name="orderbutton"]')
+    .click()
+    cy
+    .get('input[name="name"]')
+    .type('Dan').clear()
+  })
 })
