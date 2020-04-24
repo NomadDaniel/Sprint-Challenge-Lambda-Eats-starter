@@ -7,7 +7,7 @@ const formSchema=yup.object().shape({
   name: yup.string()
     .required('Your name is required')
     .min(2, 'name must have at least 2 letters'),
-    size: yup.string().required('You must choose a size'),
+  size: yup.string().required('You must choose a size'),
   pepperoni: yup.boolean().defined(),
   bacon: yup.boolean().defined(),
   capicola: yup.boolean().defined(),
@@ -40,27 +40,27 @@ export default function Form() {
   const [buttonDisabled, setButtonDisabled]=useState(true)
   const [post, setPost]=useState([])
 
-// SECTION 3: EVENT HANDLERS (1.inputChange, 2.buttonDisabled, 3.validateChange, 4.onSubmit)
+// SECTION 3: EVENT HANDLERS (1.inputChange, 2.buttonDisabled, 3.validateChange, 4.formSubmit(onSubmit))
 
-//1.input change
+//1.inputChange
   const inputChange = e => {
-    e.persist();
+    e.persist()
     const newFormData = {
       ...formState,
       [e.target.name]:
-        e.target.type === "checkbox" ? e.target.checked : e.target.value
-    };
+        e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    }
 
     validateChange(e);
     setFormState(newFormData);
-  };
-  //2.button disabled
+  }
+  //2.buttonDisabled
   useEffect(() => {
     formSchema.isValid(formState).then(valid => {
       setButtonDisabled(!valid);
     });
   }, [formState]);
-  //3.validate changes
+  //3.validateChange
   const validateChange = e => {
     yup
       .reach(formSchema, e.target.name)
@@ -68,8 +68,8 @@ export default function Form() {
       .then(valid => {
         setErrors({
           ...errors,
-          [e.target.name]: ""
-        });
+          [e.target.name]: ''
+        })
       })
       .catch(err => {
         setErrors({
@@ -78,23 +78,23 @@ export default function Form() {
         });
       });
   };
-  //4.on submit
+  //4.formSubmit
   const formSubmit = e => {
     e.preventDefault();
     axios
-      .post("https://reqres.in/api/users", formState)
+      .post('https://reqres.in/api/users', formState)
       .then(res => {
         setPost(res.data);
-        console.log("successful post!", post);
+        console.log('successful post!', post);
         console.log(res.data.size)
         setFormState({
-            name: "",
+            name: '',
             size: res.data.size,
             pepperoni: false,
             bacon: false,
             capicola: false,
             sausage: false,
-            specialInstructions: ""
+            specialInstructions: ''
         });
       })
       .catch(err => console.log(err.response));
@@ -178,7 +178,7 @@ export default function Form() {
           <input
             type='checkbox'
             name='sausage'
-            id = 'sausageCheckBox'
+            id='sausageCheckBox'
             checked={formState.sausage} 
             onChange={inputChange}
           />
@@ -188,15 +188,15 @@ export default function Form() {
 
       </div>
 
-        <label htmlFor = 'Special Instructions'>
+        <label htmlFor='Special Instructions'>
           <br/>
           Any special instructions?
           <br/>
           <br/>
           <textarea
-          name = 'specialInstructions'
-          id = 'specialInstructionsInput'
-          placeholder = 'Type special instructions here...'
+          name='specialInstructions'
+          id='specialInstructionsInput'
+          placeholder='Type special instructions here...'
           value={formState.specialInstructions} 
           onChange={inputChange}
           />
